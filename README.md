@@ -6,7 +6,7 @@
 
 **Status:** Unfinished first draft. Not ready for use.
 
-**Documentation:** https://www.techandstarup.com/guides/nodejs-app-structure
+**Documentation:** https://www.techandstartup.com/guides/nodejs-app-structure
 
 To run the app in your development environment with debug mode:  
 DEBUG=node-auth:* npm start
