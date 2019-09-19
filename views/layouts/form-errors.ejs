@@ -1,0 +1,8 @@
+<% if(typeof errors !== 'undefined') { %>
+  <ul>
+    <li><strong>Correct Any Errors Below And Resubmit:</strong></li>
+    <% for (var error of errors) { %>
+      <li><%= error.msg %></li>
+    <% } %>
+  </ul>
+<% } %>

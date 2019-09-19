@@ -1,0 +1,31 @@
+<% include ../layouts/header %>
+
+<h1>Create Article</h1>
+
+<% include ../layouts/form-errors %>
+
+<form method="POST" action="/articles/create">
+  <div>
+    <label for="title">Title</label><br>
+    <input type="text" name="title" value="<%= typeof article === 'undefined' ? '' : article.title %>" maxlength="200" autofocus>
+  </div>
+
+  <div>
+    <label for="content">Content</label><br>
+    <textarea name="content">
+      <%= typeof article === 'undefined' ? '' : article.content %>
+    </textarea>
+  </div>
+
+  <div>
+    <input type="checkbox" name="published" id="published" value=true <%= typeof article !== 'undefined' && article.published === 'true' ? 'checked' : '' %>>
+    <label for="published">Publish</label>
+  </div>
+
+  <div>
+    <button type="submit">Submit</button>
+    <a href="/articles">Cancel</a>
+  </div>
+</form>
+
+<% include ../layouts/footer %>

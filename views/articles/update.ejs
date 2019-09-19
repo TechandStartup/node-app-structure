@@ -1,0 +1,37 @@
+<% include ../layouts/header %>
+
+<h1>Update Article</h1>
+
+<% include ../layouts/form-errors %>
+
+<form method="POST" action="/articles/<%= article._id %>/update">
+  <div>
+    <label for="title">Title</label><br>
+    <input type="text" name="title" 
+        value="<%= typeof article === 'undefined' ? '' : article.title %>" 
+        maxlength="200" required>
+  </div>
+
+  <div>
+    <label for="content">Content</label><br>
+    <textarea name="content" rows="10" required><%= typeof article === 'undefined' ? '' : article.content %></textarea>
+  </div>
+
+  <div>
+    <input type="checkbox" name="published" id="published" value=true 
+        <%= typeof article !== 'undefined' && article.published ? 'checked' : '' %> >
+    <label for="published">Publish</label>
+  </div>
+
+  <div>
+    <button type="submit">Submit</button>
+    <a href="/articles/<%= article._id %>">Cancel</a>
+  </div>
+</form>
+
+<hr>
+
+<h3>Delete Article</h3>
+<a href="/articles/<%= article._id %>/delete">Delete</a>
+
+<% include ../layouts/footer %>

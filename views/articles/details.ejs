@@ -1,0 +1,17 @@
+<% include ../layouts/header %>
+
+<h1>
+  <%= !article.published ? '(Draft) ' : '' %>
+  <%= article.title %>  
+</h1>
+<small><%= article.updatedAt.toLocaleString("en-US", {month: 'short', day: 'numeric', year: 'numeric'}); %></small>
+<hr>
+
+<div>
+  <%= article.content %>
+</div>
+
+<hr>
+<a href="/articles/<%= article.id %>/update" class='btn btn-info float-right'>Update Article</a>
+
+<% include ../layouts/footer %>

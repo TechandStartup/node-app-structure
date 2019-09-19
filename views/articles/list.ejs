@@ -1,0 +1,15 @@
+<% include ../layouts/header %>
+
+<h1>Articles</h1>
+
+<ul>
+  <% articles.forEach(function(article) { %>
+    <li>
+      <%= !article.published ? '(Draft) ' : '' %>
+      <a href="/articles/<%= article.id %>"><%= article.title %></a>
+    </li>
+  <% }); %>
+</ul>
+<a href='/articles/create'>Create new article</a>
+
+<% include ../layouts/footer %>
