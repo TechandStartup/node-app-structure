@@ -7,6 +7,7 @@
     <li>
       <%= !article.published ? '(Draft) ' : '' %>
       <a href="/articles/<%= article.id %>"><%= article.title %></a>
+      <small><%= article.createdAt.toDateString() %></small>
     </li>
   <% }); %>
 </ul>
