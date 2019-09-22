@@ -6,7 +6,7 @@
 
 **Status:** Unfinished first draft. Not ready for use.
 
-**Documentation:** https://www.techandstartup.com/guides/nodejs-app-structure
+**Documentation:** https://www.techandstartup.com/guides/nodejs/app-structure
 
 To use this app you need to have either a local or cloud version of MongoDB. 
 Then change the .env-example file name to just .env, and make sure the MONGODB_URI constant is set to the right URI of your database. If you have a local MongoDB database named my_local_db running then it is set correctly.
