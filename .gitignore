@@ -62,3 +62,5 @@ typings/
 
 CONTEXT.txt
 GUIDE.html
+VALIDATION.txt
+models/mongoose-unique-validator.js

@@ -5,6 +5,7 @@ const { formErrors } = require('./controllerMethods');
 // GET /articles
 exports.list = (req, res, next) => {
   Article.find()
+  // Article.find({published: true}) adds a condition
     .sort({'title': 'asc'})
     .limit(50)
     .select('_id title published createdAt')
@@ -67,12 +68,13 @@ exports.update = async (req, res, next) => {
   const article = {
     title: req.body.title,
     content: req.body.content,
-    published: req.body.published,
+    published: req.body.published || false,
     _id: req.params.id
   };
   try {
     const updatedArticle = await Article.findByIdAndUpdate(
-      req.params.id, article, 
+      req.params.id, 
+      article, 
       {new: true, runValidators: true}
     );
     res.redirect(`/articles/${article._id}`);
@@ -104,7 +106,7 @@ exports.delete = (req, res, next) => {
     if (err) { 
       next(err); 
     } else {
-      res.redirect('/');   
+      res.redirect('/articles');   
     }
   })
 };
