@@ -7,16 +7,16 @@
 <form method="POST" action="/articles/create">
   <div>
     <label for="title">Title</label><br>
-    <input type="text" name="title" value="<%= typeof article === 'undefined' ? '' : article.title %>" maxlength="200" autofocus>
+    <input type="text" name="title" value="<%= typeof article === 'undefined' ? '' : article.title %>" maxlength="200" required>
   </div>
 
   <div>
     <label for="content">Content</label><br>
-    <textarea name="content"><%= typeof article === 'undefined' ? '' : article.content %></textarea>
+    <textarea name="content" required><%= typeof article === 'undefined' ? '' : article.content %></textarea>
   </div>
 
   <div>
-    <input type="checkbox" name="published" id="published" value=true <%= typeof article !== 'undefined' && article.published === 'true' ? 'checked' : '' %>>
+    <input type="checkbox" name="published" id="published" value='true' <%= typeof article !== 'undefined' && article.published === 'true' ? 'checked' : '' %>>
     <label for="published">Publish</label>
   </div>
 

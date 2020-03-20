@@ -1,14 +1,22 @@
-const Article = require('../models/article');
+const { body, validationResult } = require('express-validator');
 const createError = require('http-errors');
-const { formErrors } = require('./controllerMethods');
+const Article = require('../models/article');
+
+exports.validateForm = [
+  // Validate the title and content fields.
+  body('title').trim().not().isEmpty().withMessage('Title is required.')
+  .isLength({ max: 200 }).withMessage('Title should not exceed 200 characters.')
+  .matches(/^[\w'",.!?\- ]+$/).withMessage(`Title should only contain letters, numbers, spaces, and '",.!?- characters.`),
+  body('content').trim().escape()
+  .isLength({ min: 3 }).withMessage('Article content must be at least 3 characters.')
+  .isLength({ max: 5000 }).withMessage('Article content should not exceed 5000 characters.'),
+]
 
 // GET /articles
 exports.list = (req, res, next) => {
   Article.find()
-  // Article.find({published: true}) adds a condition
     .sort({'title': 'asc'})
     .limit(50)
-    .select('_id title published createdAt')
     .exec((err, articles) => {
       if (err) { 
         next(err); 
@@ -30,25 +38,22 @@ exports.details = (req, res, next) => {
   });
 };
 
-// GET /article/create
+// GET /articles/create
 exports.createView = (req, res, next) => {
   res.render('articles/create', { title: 'Create Article' });
 };
 
-// POST /article/create
-exports.create = async (req, res, next) => {
-  try {
-    const newArticle = await Article.create(req.body);
-    res.redirect(`/articles/${newArticle._id}`);
-  } catch (err) {
-    if (err.name == 'ValidationError') {
-      const errors = formErrors(err);
-      res.render('articles/create', { article: req.body, errors: errors });
-    } else {
-      console.error(err);
-      res.status(500).send(err);
-    }
+// POST /articles/create
+exports.create = (req, res, next) => {
+  // Check request's validation result. Wrap errors in an object with useful functions.
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render('articles/create', { article: req.body, errors: errors.array() });
   }
+  Article.create(req.body, (err, article) => {
+    if (err) { return next(err); }
+    res.redirect(`/articles/${article.id}`);
+  });
 };
 
 // GET /articles/:id/update
@@ -65,27 +70,21 @@ exports.updateView = (req, res, next) => {
 
 // POST /articles/:id/update
 exports.update = async (req, res, next) => {
+  // Specify the fields that can be updated. Assign id from the request route's id parameter.
   const article = {
     title: req.body.title,
     content: req.body.content,
-    published: req.body.published || false,
+    published: req.body.published,
     _id: req.params.id
   };
-  try {
-    const updatedArticle = await Article.findByIdAndUpdate(
-      req.params.id, 
-      article, 
-      {new: true, runValidators: true}
-    );
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render('articles/update', { article: article, errors: errors.array() });
+  }    
+  Article.findByIdAndUpdate(req.params.id, article, {new: true}, (err) => {
+    if (err) { return next(err); }
     res.redirect(`/articles/${article._id}`);
-  } catch (err) {
-    if (err.name == 'ValidationError') {
-      const errors = formErrors(err);
-      res.render('articles/update', { article: article, errors: errors });
-    } else {
-      res.status(500).send(err);
-    }
-  }
+  });
 };
 
 // GET /articles/:id/delete
